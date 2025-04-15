@@ -1,0 +1,49 @@
+#addButton {
+    width: 150px;
+    margin-top: 20px;
+}
+
+#addedCities {
+    border: 1px solid black;
+}
+
+
+body {
+    margin: 0px;
+}
+
+container {
+    display: flex;
+
+    max-width: 1400px;
+    margin: 20px 50px;
+}
+
+#cityName {
+    border: none; 
+    border-bottom: 2px solid black;
+}
+
+#cities {
+    border: 1px solid black;
+    flex-grow: 1;
+}
+
+#addCity {
+    border: 1px solid black;
+    width: 100px;
+    flex-grow: 2;
+    padding: 15px 20px;
+}
+
+#middle {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#searchCity {
+    border: 1px solid black;
+    width: 100px;
+    flex-grow: 1;
+}

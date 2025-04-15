@@ -32,16 +32,18 @@ function handler (request) {
         { headers: headersCORS }); 
       }
 
+      //få städerna på webbsidan
     if (request.method === "GET" && url.pathname === "/cities") {
       return new Response(JSON.stringify(cities), 
       {status: 200,
         headers: {"Content-Type": "application/json"} ,headers
       });
-    } else {
-      return new Response(null, 
-        {headers: headers, 
-          status: 400});
+    } 
+
+    if(request.method === "POST" && url.pathname ==="/cities") {
+
     }
+
 }
 
 Deno.serve(handler);
