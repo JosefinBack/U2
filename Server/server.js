@@ -54,11 +54,22 @@ async function handler (request) {
         let body = await request.json(); 
   
         if("name" in body && "country" in body) {
+          const cityAlredyExist = cities.some((city) => city.name === body.name && city.country === body.country)
+
+          if(cityAlredyExist) {
+            return new Response(JSON.stringify({"Message": "City alredy exist in the list"}), {
+              status: 400, 
+              headers: headerCORS,
+            });
+          }
+
           const newCity = {
             id: id++,
             name: body.name,
             country: body.country,
           }
+
+          cities.push(newCity); //lägg till staden 
   
           return new Response(JSON.stringify(newCity), {
             status: 200,
@@ -76,7 +87,9 @@ async function handler (request) {
   
         const findCity = cities.findIndex((city) => city.id === removeId);
   
-        cities.splice(findCity, 1); 
+        if(findCity !== -1) {
+          cities.splice(findCity, 1); 
+        }
   
         return new Response(JSON.stringify("Delete OK"), {
           status: 200,
