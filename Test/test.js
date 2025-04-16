@@ -63,6 +63,42 @@ async function f4() {
     console.log("test 4", resourseCities);
 }
 
+//test 5 
+async function f5() {
+    const request = new Request("http://localhost:8000/cities/43")
+    const responsePromise = await fetch(request); 
+    const resourse = await responsePromise.json();
+
+    console.log("test 5", resourse);
+}
+
+//test 6
+// async function f6 () {
+//     const request = new Request("http://localhost:8000/cities/search?text=en")
+//     const responsePromise = await fetch(request);
+//     const resourse = await responsePromise.json();
+
+//     console.log("test 6", resourse);
+// }
+async function f6() {
+    const request = new Request("http://localhost:8000/cities/search?text=en");
+    const response = await fetch(request);
+    
+    // Kontrollera om svaret är okej och inte tomt
+    if (!response.ok) {
+        console.error("Server returned an error:", response.status);
+        return;
+    }
+    
+    try {
+        const resourse = await response.json();
+        console.log("test 6", resourse);
+    } catch (error) {
+        console.error("Failed to parse JSON:", error);
+    }
+}
+
+
 
 //Functionsanrop 
 //async/await
@@ -72,6 +108,8 @@ async function runTest() {
     await f2();
     await f3();
     await f4(); 
+    await f5();
+    await f6();
 }
 
 runTest();

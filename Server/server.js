@@ -19,11 +19,12 @@ const cities = [
   { id: 42, name: "Strasbourg", country: "France"},
 ];
 
-let id= 42; //lägger den här för om dne ligger i functionen så kommer den att återställas varje gång servern tar emot en ny förfrågan. 
+let id= 43; //lägger den här för om dne ligger i functionen så kommer den att återställas varje gång servern tar emot en ny förfrågan. 
 
 //Server
 async function handler (request) {
   const url = new URL(request.url);
+  const patternId = new URLPattern({pathname:"/cities/:id"})
 
   //servern hanterar CORS här
   const headerCORS = new Headers();
@@ -36,17 +37,47 @@ async function handler (request) {
       {return new Response(null, 
         { headers: headerCORS }); 
       }
-
-    //få städerna, test 1
+  
     if (request.method === "GET") {
-      if(url.pathname === "/cities") {
-        return new Response(JSON.stringify(cities), 
-        {status: 200,
-          headers: headerCORS,
-        });
-      } 
+
+          //test 6 
+    let array = [];
+    if(url.pathname === "/cities/search") {
+      const urlParams = new URLSearchParams(url.search);
+      const searchText = urlParams.get("text");
+
+      array = cities.filter(city => city.name.toLowerCase().includes(searchText.toLowerCase()))
+
+      console.log("Returning cities array:", array);
+
+      return new Response(JSON.stringify(array), {
+        status: 200, 
+        headers: headerCORS,
+      });
     }
 
+    //test 5
+    if (patternId.test(url)) {
+      const match = patternId.exec(url);
+      const cityRightId = Number(match.pathname.groups.id);
+    
+      const findCity = cities.find((city) => city.id === cityRightId);
+    
+      return new Response(JSON.stringify(findCity), {
+        status: 200,
+        headers: headerCORS,
+      });
+    }
+
+    //få städerna, test 1
+    if(url.pathname === "/cities") {
+      return new Response(JSON.stringify(cities), 
+        {status: 200, 
+         headers: headerCORS,
+      });
+    } 
+
+  }
 
     //test 2
     if(request.method === "POST") {
