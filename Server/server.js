@@ -19,31 +19,70 @@ const cities = [
   { id: 42, name: "Strasbourg", country: "France"},
 ];
 
+let id= 42; //lägger den här för om dne ligger i functionen så kommer den att återställas varje gång servern tar emot en ny förfrågan. 
+
 //Server
-function handler (request) {
+async function handler (request) {
   const url = new URL(request.url);
 
   //servern hanterar CORS här
-  const headers = new Headers();
-    headers.append("Access-Control-Allow-Origin", "*");
+  const headerCORS = new Headers();
+  headerCORS.append("Access-Control-Allow-Origin", "*");
+  headerCORS.append("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+  headerCORS.append("Access-Control-Allow-Headers", "Content-Type");
+  headerCORS.append("Content-Type", "application/json");
 
     if (request.method === "OPTIONS") 
       {return new Response(null, 
-        { headers: headersCORS }); 
+        { headers: headerCORS }); 
       }
 
-      //få städerna 
-    if (request.method === "GET" && url.pathname === "/cities") {
-      return new Response(JSON.stringify(cities), 
-      {status: 200,
-        headers: {"Content-Type": "application/json"} ,headers
-      });
-    } 
-
-    if(request.method === "POST" && url.pathname ==="/cities") {
-
+    //få städerna, test 1
+    if (request.method === "GET") {
+      if(url.pathname === "/cities") {
+        return new Response(JSON.stringify(cities), 
+        {status: 200,
+          headers: headerCORS,
+        });
+      } 
     }
 
-}
 
+    //test 2
+    if(request.method === "POST") {
+      if(url.pathname ==="/cities") {
+        let body = await request.json(); 
+  
+        if("name" in body && "country" in body) {
+          const newCity = {
+            id: id++,
+            name: body.name,
+            country: body.country,
+          }
+  
+          return new Response(JSON.stringify(newCity), {
+            status: 200,
+            headers: headerCORS,
+          })
+        } 
+      }
+    }
+
+    //test 3
+    if(request.method === "DELETE") {
+      if(url.pathname === "/cities") {
+        let body = await request.json();
+        let removeId = body.id; 
+  
+        const findCity = cities.findIndex((city) => city.id === removeId);
+  
+        cities.splice(findCity, 1); 
+  
+        return new Response(JSON.stringify("Delete OK"), {
+          status: 200,
+          headers: headerCORS, 
+        })
+      }
+    } 
+}
 Deno.serve(handler);

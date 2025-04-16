@@ -29,8 +29,10 @@ async function getCities() {
     }
 }
 
-async function addOneCity() {
-    const request = new Request("http://localhost:8000/cities");
+function addOneCity() {
+    options = {method: "POST"}
+
+    const request = new Request("http://localhost:8000/cities", options);
 
 
 

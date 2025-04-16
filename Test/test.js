@@ -10,25 +10,62 @@ async function f1() {
     
     const response = await fetch(request);
     const cities = await response.json();
-
-    if(Array.isArray(cities) && cities.length == 17) {
         if(response.status == 200) {
             console.log("test 1", cities);
         } else {
-            console.log("Wrong status, should be 200");
+            console.log("Wrong status, it should be 200");
         }
+}
+
+//nummer 2
+async function f2() {
+    options = {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            "name": "Malmö",
+            "country": "Sweden"
+        })
     }
+
+    const request = new Request("http://localhost:8000/cities", options);
+
+    const responsePromise = await fetch(request);
+    const resourcePromise = await responsePromise.json();
+
+    console.log("test 2", resourcePromise)
+;    
+}
+
+//nummer 3
+async function f3() {
+    const options = {
+        method: "DELETE",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            id: 2,
+        })
+    }
+
+    const request = new Request("http://localhost:8000/cities", options);
+
+    const responsePromise = await fetch(request);
+    const resourse = await responsePromise.json();
+    
+    console.log("test 3", resourse);
+}
+
+//test 4
+async function f4() {
+    
 }
 
 
-//nummer 2
-// options = {method: "POST"}
 
-// const request = new Request("http://localhost:8000/cities", options);
 
-//Functionsanrop
+//Functionsanrop 
+//async/await
 f1(); 
-
-
-
+f2();
+f3();
 
