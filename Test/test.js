@@ -33,8 +33,7 @@ async function f2() {
     const responsePromise = await fetch(request);
     const resourcePromise = await responsePromise.json();
 
-    console.log("test 2", resourcePromise)
-;    
+    console.log("test 2", resourcePromise);    
 }
 
 //nummer 3
@@ -57,15 +56,22 @@ async function f3() {
 
 //test 4
 async function f4() {
-    
+    const request = new Request("http://localhost:8000/cities")
+    const response = await fetch(request);
+    const resourseCities = await response.json();
+
+    console.log("test 4", resourseCities);
 }
-
-
 
 
 //Functionsanrop 
 //async/await
-f1(); 
-f2();
-f3();
+//skriver dem i en annan funktion eftersom jag vill att de ska köras i exakt denna ordning. De körs inte såhär om de står utan en funktion. 
+async function runTest() {
+    await f1(); 
+    await f2();
+    await f3();
+    await f4(); 
+}
 
+runTest();
