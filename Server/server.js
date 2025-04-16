@@ -32,7 +32,7 @@ function handler (request) {
         { headers: headersCORS }); 
       }
 
-      //få städerna på webbsidan
+      //få städerna 
     if (request.method === "GET" && url.pathname === "/cities") {
       return new Response(JSON.stringify(cities), 
       {status: 200,

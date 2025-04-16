@@ -5,39 +5,30 @@
 
 
 //nummer 1
+async function f1() {
+    const request = new Request("http://localhost:8000/cities");
+    
+    const response = await fetch(request);
+    const cities = await response.json();
 
-//kolla så att jag får en array 
+    if(Array.isArray(cities) && cities.length == 17) {
+        if(response.status == 200) {
+            console.log("test 1", cities);
+        } else {
+            console.log("Wrong status, should be 200");
+        }
+    }
+}
+
 
 //nummer 2
-options = {method: POST}
+// options = {method: "POST"}
 
-const request = new Request("http://localhost:8000/cities", options);
+// const request = new Request("http://localhost:8000/cities", options);
 
-
-
-
-
+//Functionsanrop
+f1(); 
 
 
 
 
-// async function f1() {
-//     const request = new Request("http://localhost:8000/cities");
-
-//     if(request.method === "POST" && URL.pathname ==="/cities") {
-//         const body = await request.json();
-
-//         if("name" in body && "country" in body) {
-//             console.log(body);
-//         return new Response(JSON.stringify({
-//             name: body.city,
-//             country: body.country,
-//         }), {
-//             status: 200,
-//             headers: {"Content-Type": "application/json"}
-//         });
-//     }
-//     }
-
-// }
-// f1();
