@@ -4,7 +4,7 @@
 //kopplad till servern 
 
 
-//nummer 1
+//test 1
 async function f1() {
     const request = new Request("http://localhost:8000/cities");
     
@@ -17,7 +17,7 @@ async function f1() {
         }
 }
 
-//nummer 2
+//test 2
 async function f2() {
     options = {
         method: "POST",
@@ -36,7 +36,7 @@ async function f2() {
     console.log("test 2", resourcePromise);    
 }
 
-//nummer 3
+//test 3
 async function f3() {
     const options = {
         method: "DELETE",
@@ -73,29 +73,20 @@ async function f5() {
 }
 
 //test 6
-// async function f6 () {
-//     const request = new Request("http://localhost:8000/cities/search?text=en")
-//     const responsePromise = await fetch(request);
-//     const resourse = await responsePromise.json();
-
-//     console.log("test 6", resourse);
-// }
 async function f6() {
     const request = new Request("http://localhost:8000/cities/search?text=en");
-    const response = await fetch(request);
     
-    // Kontrollera om svaret är okej och inte tomt
-    if (!response.ok) {
-        console.error("Server returned an error:", response.status);
-        return;
-    }
-    
-    try {
-        const resourse = await response.json();
-        console.log("test 6", resourse);
-    } catch (error) {
-        console.error("Failed to parse JSON:", error);
-    }
+    const responsePromise = await fetch(request);
+    const resourse = await responsePromise.json();
+    console.log("test 6", resourse);
+}
+
+async function f7() {
+    const request = new Request("http://localhost:8000/cities/search?text=en&country=Sweden")
+
+    const responsePromise = await fetch(request); 
+    const resourse = await responsePromise.json();
+    console.log("test 7", resourse);
 }
 
 
@@ -110,6 +101,7 @@ async function runTest() {
     await f4(); 
     await f5();
     await f6();
+    await f7();
 }
 
 runTest();

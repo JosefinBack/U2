@@ -33,22 +33,36 @@ async function handler (request) {
   headerCORS.append("Access-Control-Allow-Headers", "Content-Type");
   headerCORS.append("Content-Type", "application/json");
 
-    if (request.method === "OPTIONS") 
-      {return new Response(null, 
-        { headers: headerCORS }); 
-      }
+  if (request.method === "OPTIONS") 
+    {return new Response(null, 
+      { headers: headerCORS }); 
+    }  
+    
   
     if (request.method === "GET") {
+      //test 7 
+      let filterdArray = [];
+      if (url.pathname === "/cities/search" &&
+        url.search.includes("text=") &&
+        url.search.includes("country=")){
+        const urlParams = new URLSearchParams(url.search); 
+        const inputText = urlParams.get("text");
+        const inputCountry = urlParams.get("country");
 
-          //test 6 
-    let array = [];
+        filterdArray = cities.filter(city => city.name.includes(inputText) && city.country.includes(inputCountry)); 
+
+        return new Response(JSON.stringify(filterdArray), {
+          status: 200,
+          headers: headerCORS,
+        })
+      }
+
+    //test 6 
     if(url.pathname === "/cities/search") {
       const urlParams = new URLSearchParams(url.search);
       const searchText = urlParams.get("text");
 
-      array = cities.filter(city => city.name.toLowerCase().includes(searchText.toLowerCase()))
-
-      console.log("Returning cities array:", array);
+      let array = cities.filter(city => city.name.toLowerCase().includes(searchText.toLowerCase()));
 
       return new Response(JSON.stringify(array), {
         status: 200, 
