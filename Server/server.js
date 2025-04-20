@@ -1,30 +1,30 @@
 
 const cities = [
-  { id: 2, name: "Lille", country: "France"},
-  { id: 3, name: "Nantes", country: "France"},
-  { id: 5, name: "Bremen", country: "Germany"},
-  { id: 10, name: "Dresden", country: "Germany"},
-  { id: 11, name: "Heidelberg", country: "Germany"},
-  { id: 12, name: "Venice", country: "Italy"},
-  { id: 13, name: "Rome", country: "Italy"},
-  { id: 16, name: "Graz", country: "Austria"},
-  { id: 20, name: "Basel", country: "Switzerland"},
-  { id: 21, name: "Lucerne", country: "Switzerland"},
-  { id: 22, name: "Kraków", country: "Poland"},
-  { id: 23, name: "Warsaw", country: "Poland"}, 
-  { id: 24, name: "Poznań", country: "Poland"},
-  { id: 28, name: "Ghent", country: "Belgium"},
-  { id: 31, name: "Maastricht", country: "Netherlands"},
-  { id: 38, name: "Maribor", country: "Slovenia"},
-  { id: 42, name: "Strasbourg", country: "France"},
+  { id: 2, name: "Lille", country: "France" },
+  { id: 3, name: "Nantes", country: "France" },
+  { id: 5, name: "Bremen", country: "Germany" },
+  { id: 10, name: "Dresden", country: "Germany" },
+  { id: 11, name: "Heidelberg", country: "Germany" },
+  { id: 12, name: "Venice", country: "Italy" },
+  { id: 13, name: "Rome", country: "Italy" },
+  { id: 16, name: "Graz", country: "Austria" },
+  { id: 20, name: "Basel", country: "Switzerland" },
+  { id: 21, name: "Lucerne", country: "Switzerland" },
+  { id: 22, name: "Kraków", country: "Poland" },
+  { id: 23, name: "Warsaw", country: "Poland" },
+  { id: 24, name: "Poznań", country: "Poland" },
+  { id: 28, name: "Ghent", country: "Belgium" },
+  { id: 31, name: "Maastricht", country: "Netherlands" },
+  { id: 38, name: "Maribor", country: "Slovenia" },
+  { id: 42, name: "Strasbourg", country: "France" },
 ];
 
-let id= 43; //lägger den här för om dne ligger i functionen så kommer den att återställas varje gång servern tar emot en ny förfrågan. 
+let id = 43; //lägger den här för om dne ligger i functionen så kommer den att återställas varje gång servern tar emot en ny förfrågan. 
 
 //Server
-async function handler (request) {
+async function handler(request) {
   const url = new URL(request.url);
-  const patternId = new URLPattern({pathname:"/cities/:id"})
+  const patternId = new URLPattern({ pathname: "/cities/:id" })
 
   //servern hanterar CORS här
   const headerCORS = new Headers();
@@ -33,37 +33,38 @@ async function handler (request) {
   headerCORS.append("Access-Control-Allow-Headers", "Content-Type");
   headerCORS.append("Content-Type", "application/json");
 
-  if (request.method === "OPTIONS") 
-    {return new Response(null, 
-      { headers: headerCORS }); 
-    }  
-    
-  
-    if (request.method === "GET") {
-      //test 7 
-      let filterdArray = [];
+  if (request.method === "OPTIONS") {
+    return new Response(null,
+      { headers: headerCORS });
+  }
 
-      if (url.pathname === "/cities/search" &&
-        url.search.includes("text") &&
-        url.search.includes("country")){
 
-        const urlParams = new URLSearchParams(url.search); 
-        const inputText = urlParams.get("text");
-        const inputCountry = urlParams.get("country");
+  if (request.method === "GET") {
+    //test 7 
+    let filterdArray = [];
 
-        filterdArray = cities.filter(city => city.name.includes(inputText) && city.country.includes(inputCountry)); 
+    if (url.pathname === "/cities/search" &&
+      url.search.includes("text") &&
+      url.search.includes("country")) {
 
-        return new Response(JSON.stringify(filterdArray), {
-          status: 200,
-          headers: headerCORS,
-        })
-      }
+      const urlParams = new URLSearchParams(url.search);
+      const inputText = urlParams.get("text");
+      const inputCountry = urlParams.get("country");
+
+      filterdArray = cities.filter(city => city.name.includes(inputText) && city.country.includes(inputCountry));
+
+      return new Response(JSON.stringify(filterdArray), {
+        status: 200,
+        headers: headerCORS,
+      })
+    }
 
     //test 6 
-    if(url.pathname === "/cities/search") {
+    if (url.pathname === "/cities/search") {
       const urlParams = new URLSearchParams(url.search);
       const searchText = urlParams.get("text");
 
+      //test 13
       if (!searchText) {
         return new Response(JSON.stringify({ error: "Must have a searchparam" }), {
           status: 400,
@@ -74,7 +75,7 @@ async function handler (request) {
       let array = cities.filter(city => city.name.toLowerCase().includes(searchText.toLowerCase()));
 
       return new Response(JSON.stringify(array), {
-        status: 200, 
+        status: 200,
         headers: headerCORS,
       });
     }
@@ -83,9 +84,9 @@ async function handler (request) {
     if (patternId.test(url)) {
       const match = patternId.exec(url);
       const cityRightId = Number(match.pathname.groups.id);
-    
+
       const findCity = cities.find((city) => city.id === cityRightId);
-    
+
       return new Response(JSON.stringify(findCity), {
         status: 200,
         headers: headerCORS,
@@ -93,97 +94,98 @@ async function handler (request) {
     }
 
     //få städerna, test 1
-    if(url.pathname === "/cities") {
-      return new Response(JSON.stringify(cities), 
-        {status: 200, 
-         headers: headerCORS,
-      });
-    } 
+    if (url.pathname === "/cities") {
+      return new Response(JSON.stringify(cities),
+        {
+          status: 200,
+          headers: headerCORS,
+        });
+    }
 
   }
 
-    //test 2 och test 8
-    if(request.method === "POST") {
-      if(url.pathname ==="/cities") {
-        let body = await request.json(); 
-  
-        if("name" in body && "country" in body) {
-          const cityAlredyExist = cities.some((city) => city.name === body.name && city.country === body.country)
+  //test 2 och test 8
+  if (request.method === "POST") {
+    if (url.pathname === "/cities") {
+      let body = await request.json();
 
-          //test 8
-          if(cityAlredyExist) {
-            return new Response(JSON.stringify({"Message": "City alredy exist in the list"}), {
-              status: 409, 
-              headers: headerCORS,
-            });
-          }
+      if ("name" in body && "country" in body) {
+        const cityAlredyExist = cities.some((city) => city.name === body.name && city.country === body.country)
 
-          const newCity = {
-            id: id++,
-            name: body.name,
-            country: body.country,
-          }
-
-          cities.push(newCity); //lägg till staden 
-  
-          return new Response(JSON.stringify(newCity), {
-            status: 200,
-            headers: headerCORS,
-          })
-        } else {
-          return new Response(JSON.stringify({"Message":"Missing parts of request"}), {
-            status: 400,
+        //test 8
+        if (cityAlredyExist) {
+          return new Response(JSON.stringify({ "Message": "City alredy exist in the list" }), {
+            status: 409,
             headers: headerCORS,
           });
         }
-      }
 
-      //test 12
-      if(url.pathname === "/message") {
-        return new Response(JSON.stringify({"Message": "Bad request in url"}), {
+        const newCity = {
+          id: id++,
+          name: body.name,
+          country: body.country,
+        }
+
+        cities.push(newCity); //lägg till staden 
+
+        return new Response(JSON.stringify(newCity), {
+          status: 200,
+          headers: headerCORS,
+        })
+      } else {
+        return new Response(JSON.stringify({ "Message": "Missing parts of request" }), {
           status: 400,
           headers: headerCORS,
         });
       }
     }
 
-    //test 3
-    if(request.method === "DELETE") {
-      if(url.pathname === "/cities") {
-        let body = await request.json();
-        let removeId = body.id; 
+    //test 12
+    if (url.pathname === "/message") {
+      return new Response(JSON.stringify({ "Message": "Bad request in url" }), {
+        status: 400,
+        headers: headerCORS,
+      });
+    }
+  }
 
-        if(Object.keys(body).length === 0) {
-          return new Response(JSON.stringify({"Message": "Empty request"}), {
-            status: 400,
-            headers: headerCORS,
-          });
-        }
-  
-        const findCity = cities.findIndex((city) => city.id === removeId);
-  
-        if(findCity !== -1) {
-          cities.splice(findCity, 1); 
-        } else {
-          return new Response(JSON.stringify({"Message":"ID not found"}), {
-            status: 404,
-            headers: headerCORS, 
-          });
-        }
-  
-        return new Response(JSON.stringify("Delete OK"), {
-          status: 200,
-          headers: headerCORS, 
-        })
-      }
+  //test 3
+  if (request.method === "DELETE") {
+    if (url.pathname === "/cities") {
+      let body = await request.json();
+      let removeId = body.id;
 
-      //test 14
-      if(url.pathname === "/mordor") {
-        return new Response(JSON.stringify({error: "This city is not real"}), {
+      if (Object.keys(body).length === 0) {
+        return new Response(JSON.stringify({ "Message": "Empty request" }), {
           status: 400,
           headers: headerCORS,
-        })
-      } 
-    } 
+        });
+      }
+
+      const findCity = cities.findIndex((city) => city.id === removeId);
+
+      if (findCity !== -1) {
+        cities.splice(findCity, 1);
+      } else {
+        return new Response(JSON.stringify({ "Message": "ID not found" }), {
+          status: 404,
+          headers: headerCORS,
+        });
+      }
+
+      return new Response(JSON.stringify("Delete OK"), {
+        status: 200,
+        headers: headerCORS,
+      })
+    }
+
+    //test 14
+    if (url.pathname === "/mordor") {
+      return new Response(JSON.stringify({ error: "This city is not real" }), {
+        status: 400,
+        headers: headerCORS,
+      })
+    }
+  }
 }
 Deno.serve(handler);

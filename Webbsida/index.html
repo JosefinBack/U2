@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cities</title>
     <link rel="stylesheet" href="index.css">
 </head>
+
 <body>
     <container>
         <div id="div1" class="boxes">
@@ -13,33 +15,36 @@
         </div>
         <div id="div2" class="boxes">
             <h3>Add a city to the list</h3>
-            <p>To add a city, write the name of the city and in what country it's located, then press the button "Add city"</p>
-            <div>
+            <p>To add a city, write the name of the city and in what country it's located, then press the button "Add
+                city"</p>
+            <div class="inputDiv">
                 <label for="cityName">Add a city:</label>
-                <input type="text" id="cityName" name="city">
+                <input type="text" id="cityName" name="city" autocomplete="off">
             </div>
-            <div>
+            <div class="inputDiv">
                 <label for="countryName">Country:</label>
-                <input type="text" id="countryName" name="country">
+                <input type="text" id="countryName" name="country" autocomplete="off">
             </div>
             <button id="addButton">Add city</button>
+            <p id="errorMessage"></p>
         </div>
         <div id="div3" class="boxes">
             <h3>Search for a city</h3>
             <p>Search for a city in the list</p>
-            <div>
-                <label for="cityName">Add a city:</label>
-                <input type="text" id="cityName" name="city">
+            <div class="inputDiv">
+                <label for="cityName">City:</label>
+                <input type="text" id="searchCity" name="city" autocomplete="off">
             </div>
-            <div>
+            <div class="inputDiv">
                 <label for="countryName">Country:</label>
-                <input type="text" id="countryName" name="country">
+                <input type="text" id="searchCountry" name="country" autocomplete="off">
             </div>
-            <button id="addButton">Add city</button>
+            <button id="searchButton">Search</button>
         </div>
         </div>
     </container>
 
     <script src="index.js"></script>
 </body>
+
 </html>
