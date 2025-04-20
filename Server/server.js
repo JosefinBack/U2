@@ -42,9 +42,11 @@ async function handler (request) {
     if (request.method === "GET") {
       //test 7 
       let filterdArray = [];
+
       if (url.pathname === "/cities/search" &&
-        url.search.includes("text=") &&
-        url.search.includes("country=")){
+        url.search.includes("text") &&
+        url.search.includes("country")){
+
         const urlParams = new URLSearchParams(url.search); 
         const inputText = urlParams.get("text");
         const inputCountry = urlParams.get("country");
@@ -61,6 +63,13 @@ async function handler (request) {
     if(url.pathname === "/cities/search") {
       const urlParams = new URLSearchParams(url.search);
       const searchText = urlParams.get("text");
+
+      if (!searchText) {
+        return new Response(JSON.stringify({ error: "Must have a searchparam" }), {
+          status: 400,
+          headers: headerCORS,
+        });
+      }
 
       let array = cities.filter(city => city.name.toLowerCase().includes(searchText.toLowerCase()));
 
@@ -93,7 +102,7 @@ async function handler (request) {
 
   }
 
-    //test 2
+    //test 2 och test 8
     if(request.method === "POST") {
       if(url.pathname ==="/cities") {
         let body = await request.json(); 
@@ -101,9 +110,10 @@ async function handler (request) {
         if("name" in body && "country" in body) {
           const cityAlredyExist = cities.some((city) => city.name === body.name && city.country === body.country)
 
+          //test 8
           if(cityAlredyExist) {
             return new Response(JSON.stringify({"Message": "City alredy exist in the list"}), {
-              status: 400, 
+              status: 409, 
               headers: headerCORS,
             });
           }
@@ -120,7 +130,20 @@ async function handler (request) {
             status: 200,
             headers: headerCORS,
           })
-        } 
+        } else {
+          return new Response(JSON.stringify({"Message":"Missing parts of request"}), {
+            status: 400,
+            headers: headerCORS,
+          });
+        }
+      }
+
+      //test 12
+      if(url.pathname === "/message") {
+        return new Response(JSON.stringify({"Message": "Bad request in url"}), {
+          status: 400,
+          headers: headerCORS,
+        });
       }
     }
 
@@ -129,11 +152,23 @@ async function handler (request) {
       if(url.pathname === "/cities") {
         let body = await request.json();
         let removeId = body.id; 
+
+        if(Object.keys(body).length === 0) {
+          return new Response(JSON.stringify({"Message": "Empty request"}), {
+            status: 400,
+            headers: headerCORS,
+          });
+        }
   
         const findCity = cities.findIndex((city) => city.id === removeId);
   
         if(findCity !== -1) {
           cities.splice(findCity, 1); 
+        } else {
+          return new Response(JSON.stringify({"Message":"ID not found"}), {
+            status: 404,
+            headers: headerCORS, 
+          });
         }
   
         return new Response(JSON.stringify("Delete OK"), {
@@ -141,6 +176,14 @@ async function handler (request) {
           headers: headerCORS, 
         })
       }
+
+      //test 14
+      if(url.pathname === "/mordor") {
+        return new Response(JSON.stringify({error: "This city is not real"}), {
+          status: 400,
+          headers: headerCORS,
+        })
+      } 
     } 
 }
 Deno.serve(handler);

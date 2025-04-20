@@ -1,9 +1,3 @@
-//Här testar jag all kod som sedan ska finnas i webbsida-index.js, men det är inte exakt samma kod
-//dock finns inga knappar mm, utan bara kod. Ska bara se att jag får den status eller de svar som jag ville ha enligt test-Api
-
-//kopplad till servern 
-
-
 //test 1
 async function f1() {
     const request = new Request("http://localhost:8000/cities");
@@ -81,6 +75,7 @@ async function f6() {
     console.log("test 6", resourse);
 }
 
+//test 7
 async function f7() {
     const request = new Request("http://localhost:8000/cities/search?text=en&country=Sweden")
 
@@ -89,7 +84,173 @@ async function f7() {
     console.log("test 7", resourse);
 }
 
+//Uppgifter som är gjorda med .then()
 
+//test 8
+function f8() {
+    const options = {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            "name": "Dresden",
+            "country": "Germany",
+        })
+    }
+
+    const request = new Request("http://localhost:8000/cities", options) 
+
+    const responsePromise = fetch(request);
+    responsePromise.then(a1);
+
+    function a1(response) {
+        if (response.status == 409) {
+            console.log("test 8 OK");
+            f9();
+        }
+        else {
+            console.log("test 8 NOT OK");
+        }
+    }
+}
+
+function f9 () {
+    const options = {
+        method: "POST",
+        headers: {"Content-type": "application/json"},
+        body: JSON.stringify({
+            "name": "Ystad",
+        })
+    }
+
+    const request = new Request("http://localhost:8000/cities", options)
+
+    const responsePromise = fetch(request);
+    responsePromise.then(a1);
+
+    function a1(response) {
+        if(response.status == 400) {
+            console.log("test 9 OK");
+            f10();
+        }
+        else {
+            console.log("test 9 NOT OK")
+        }
+    }
+}
+
+function f10() {
+    const options = {
+        method: "DELETE",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            "id": "56",
+        })
+    }
+
+    const request = new Request("http://localhost:8000/cities", options)
+
+    const responsePromise = fetch(request); 
+    responsePromise.then(a1); 
+
+    function a1(response) {
+        if(response.status == 404) {
+            console.log("test 10 OK");
+            f11();
+
+        } else {
+            console.log("test 10 NOT OK");
+        }
+    }
+}
+
+function f11() {
+    const options = {
+        method: "DELETE",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+
+        })
+    }
+
+    const request = new Request("http://localhost:8000/cities", options)
+
+    const responsePromise = fetch(request); 
+    responsePromise.then(a1);
+
+    function a1(response) {
+        if(response.status == 400) {
+            console.log("test 11 OK")
+            f12();
+        } else {
+            console.log("test 11 NOT OK")
+        }
+    }
+}
+
+function f12() {
+    const options = {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            "from": "2",
+            "to": "1",
+            "password": "pass"
+        })
+    }
+
+    const request = new Request("http://localhost:8000/message", options);
+
+    const resourcePromise = fetch(request);
+    resourcePromise.then(a1);
+
+    function a1(response) {
+        if(response.status == 400) {
+            console.log("Test 12 OK");
+            f13();
+        } else {
+            console.log("Test 12 NOT OK");
+        }
+    }
+}
+
+function f13() {
+    const request = new Request("http://localhost:8000/cities/search");
+
+    const responsePromise = fetch(request);
+    responsePromise.then(a1);
+
+    function a1(response) {
+        if(response.status == 400) {
+            console.log("Test 13 OK");
+            f14();
+        } else {
+            console.log("Test 13 NOT OK")
+        }
+    }
+}
+
+function f14() {
+    const options = {
+        method: "DELETE",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            "name": "mordor",
+        })
+    }
+
+    const request = new Request("http://localhost:8000/mordor", options);
+
+    const responsePromise = fetch(request);
+    responsePromise.then(a1);
+
+    function a1(response) {
+        if(response.status == 400){
+            console.log("Test 14 OK")
+        } else {
+            console.log("Test 14 NOT OK")
+        }
+    }
+}
 
 //Functionsanrop 
 //async/await
@@ -102,6 +263,7 @@ async function runTest() {
     await f5();
     await f6();
     await f7();
+    f8();
 }
 
 runTest();

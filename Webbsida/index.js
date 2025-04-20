@@ -5,7 +5,9 @@
 
 const addedCity= document.querySelector("#cityName").value; 
 const addedCounty = document.querySelector("#countryName").value;
+const addCityButton = document.querySelector("#addButton");
 
+let newCityAndCountry = [];
 
 //hämta städerna och visa dem på webbsidan
 async function getCities() {
@@ -15,7 +17,7 @@ async function getCities() {
         const response = await fetch(request);
         const cities = await response.json();
     
-        const citiesDiv = document.querySelector("#cities");
+        const citiesDiv = document.querySelector("#div1");
       
         for (let i = 0; i < cities.length; i++) {
           const city = cities[i];
@@ -29,16 +31,14 @@ async function getCities() {
     }
 }
 
-function addOneCity() {
-    options = {method: "POST"}
 
-    const request = new Request("http://localhost:8000/cities", options);
+addCityButton.addEventListener("click", function() {
+    if(addedCity && addedCounty) {
+        newCityAndCountry.push(addedCity, addedCounty
+        )
+    }
 
-
-
-
-}
-
+})
   
   // Kör funktionen för att hämta och visa städer
   getCities();
