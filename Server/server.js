@@ -62,17 +62,27 @@ async function handler(request) {
     //test 6 
     if (url.pathname === "/cities/search") {
       const urlParams = new URLSearchParams(url.search);
-      const searchText = urlParams.get("text");
+      const inputText = urlParams.get("text");
+      const inputCountry = urlParams.get("country");
 
       //test 13
-      if (!searchText) {
-        return new Response(JSON.stringify({ error: "Must have a searchparam" }), {
+      if (!inputText && !inputCountry) {
+        return new Response(JSON.stringify({ error: "Must have at leat one searchparam" }), {
           status: 400,
           headers: headerCORS,
         });
       }
 
-      let array = cities.filter(city => city.name.toLowerCase().includes(searchText.toLowerCase()));
+      let array = cities;
+      //börjar med en array som innehåller alla städer. Sen filtrerar man ut efter namn och får en ny array. Om det sedan finns country så kommer man ta den nya arrayen och filtrera ut de som innehåller country. 
+
+      if (inputText) {
+        array = array.filter(city => city.name.toLowerCase().includes(inputText.toLowerCase()));
+      }
+
+      if (inputCountry) {
+        array = array.filter(city => city.country.toLowerCase().includes(inputCountry.toLowerCase()));
+      }
 
       return new Response(JSON.stringify(array), {
         status: 200,
