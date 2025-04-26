@@ -1,7 +1,6 @@
 //test 1
 async function f1() {
     const request = new Request("http://localhost:8000/cities");
-
     const response = await fetch(request);
     const cities = await response.json();
     if (response.status == 200) {
@@ -23,7 +22,6 @@ async function f2() {
     }
 
     const request = new Request("http://localhost:8000/cities", options);
-
     const responsePromise = await fetch(request);
     const resourcePromise = await responsePromise.json();
 
@@ -41,7 +39,6 @@ async function f3() {
     }
 
     const request = new Request("http://localhost:8000/cities", options);
-
     const responsePromise = await fetch(request);
     const resourse = await responsePromise.json();
 
@@ -69,7 +66,6 @@ async function f5() {
 //test 6
 async function f6() {
     const request = new Request("http://localhost:8000/cities/search?text=en");
-
     const responsePromise = await fetch(request);
     const resourse = await responsePromise.json();
     console.log("test 6", resourse);
@@ -78,7 +74,6 @@ async function f6() {
 //test 7
 async function f7() {
     const request = new Request("http://localhost:8000/cities/search?text=en&country=Sweden")
-
     const responsePromise = await fetch(request);
     const resourse = await responsePromise.json();
     console.log("test 7", resourse);
@@ -98,7 +93,6 @@ function f8() {
     }
 
     const request = new Request("http://localhost:8000/cities", options)
-
     const responsePromise = fetch(request);
     responsePromise.then(a1);
 
@@ -123,7 +117,6 @@ function f9() {
     }
 
     const request = new Request("http://localhost:8000/cities", options)
-
     const responsePromise = fetch(request);
     responsePromise.then(a1);
 
@@ -148,7 +141,6 @@ function f10() {
     }
 
     const request = new Request("http://localhost:8000/cities", options)
-
     const responsePromise = fetch(request);
     responsePromise.then(a1);
 
@@ -156,7 +148,6 @@ function f10() {
         if (response.status == 404) {
             console.log("test 10 OK");
             f11();
-
         } else {
             console.log("test 10 NOT OK");
         }
@@ -173,7 +164,6 @@ function f11() {
     }
 
     const request = new Request("http://localhost:8000/cities", options)
-
     const responsePromise = fetch(request);
     responsePromise.then(a1);
 
@@ -199,7 +189,6 @@ function f12() {
     }
 
     const request = new Request("http://localhost:8000/message", options);
-
     const resourcePromise = fetch(request);
     resourcePromise.then(a1);
 
@@ -215,7 +204,6 @@ function f12() {
 
 function f13() {
     const request = new Request("http://localhost:8000/cities/search");
-
     const responsePromise = fetch(request);
     responsePromise.then(a1);
 
@@ -239,7 +227,6 @@ function f14() {
     }
 
     const request = new Request("http://localhost:8000/mordor", options);
-
     const responsePromise = fetch(request);
     responsePromise.then(a1);
 
@@ -252,9 +239,6 @@ function f14() {
     }
 }
 
-//Functionsanrop 
-//async/await
-//skriver dem i en annan funktion eftersom jag vill att de ska köras i exakt denna ordning. De körs inte såhär om de står utan en funktion. 
 async function runTest() {
     await f1();
     await f2();

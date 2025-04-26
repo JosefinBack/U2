@@ -19,14 +19,11 @@ const cities = [
   { id: 42, name: "Strasbourg", country: "France" },
 ];
 
-let id = 43; //lägger den här för om dne ligger i functionen så kommer den att återställas varje gång servern tar emot en ny förfrågan. 
+let id = 43;
 
-//Server
 async function handler(request) {
   const url = new URL(request.url);
-  const patternId = new URLPattern({ pathname: "/cities/:id" })
 
-  //servern hanterar CORS här
   const headerCORS = new Headers();
   headerCORS.append("Access-Control-Allow-Origin", "*");
   headerCORS.append("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
@@ -38,7 +35,6 @@ async function handler(request) {
       { headers: headerCORS });
   }
 
-
   if (request.method === "GET") {
     //test 7 
     let filterdArray = [];
@@ -47,23 +43,26 @@ async function handler(request) {
       url.search.includes("text") &&
       url.search.includes("country")) {
 
-      const urlParams = new URLSearchParams(url.search);
-      const inputText = urlParams.get("text");
-      const inputCountry = urlParams.get("country");
+      const fullUrl = new URL(request.url);
+      const inputText = fullUrl.searchParams.get("text");
+      const inputCountry = fullUrl.searchParams.get("country");
 
-      filterdArray = cities.filter(city => city.name.includes(inputText) && city.country.includes(inputCountry));
+      filterdArray = cities.filter(city =>
+        city.name.toLowerCase().includes(inputText.toLowerCase()) &&
+        city.country.toLowerCase().includes(inputCountry.toLowerCase())
+      );
 
       return new Response(JSON.stringify(filterdArray), {
         status: 200,
         headers: headerCORS,
-      })
+      });
     }
 
     //test 6 
     if (url.pathname === "/cities/search") {
-      const urlParams = new URLSearchParams(url.search);
-      const inputText = urlParams.get("text");
-      const inputCountry = urlParams.get("country");
+      const fullUrl = new URL(request.url);
+      const inputText = fullUrl.searchParams.get("text");
+      const inputCountry = fullUrl.searchParams.get("country");
 
       //test 13
       if (!inputText && !inputCountry) {
@@ -73,24 +72,27 @@ async function handler(request) {
         });
       }
 
-      let array = cities;
-      //börjar med en array som innehåller alla städer. Sen filtrerar man ut efter namn och får en ny array. Om det sedan finns country så kommer man ta den nya arrayen och filtrera ut de som innehåller country. 
+      let arrayOfAllCities = cities;
 
+      let newArrayCities = arrayOfAllCities;
       if (inputText) {
-        array = array.filter(city => city.name.toLowerCase().includes(inputText.toLowerCase()));
+        newArrayCities = arrayOfAllCities.filter(city => city.name.toLowerCase().includes(inputText.toLowerCase()));
       }
 
+      let newArrayCountries = newArrayCities;
       if (inputCountry) {
-        array = array.filter(city => city.country.toLowerCase().includes(inputCountry.toLowerCase()));
+        newArrayCountries = newArrayCities.filter(city => city.country.toLowerCase().includes(inputCountry.toLowerCase()));
       }
 
-      return new Response(JSON.stringify(array), {
+      return new Response(JSON.stringify(newArrayCountries), {
         status: 200,
         headers: headerCORS,
       });
     }
 
     //test 5
+    const patternId = new URLPattern({ pathname: "/cities/:id" })
+
     if (patternId.test(url)) {
       const match = patternId.exec(url);
       const cityRightId = Number(match.pathname.groups.id);
@@ -111,7 +113,6 @@ async function handler(request) {
           headers: headerCORS,
         });
     }
-
   }
 
   //test 2 och test 8
@@ -136,12 +137,12 @@ async function handler(request) {
           country: body.country,
         }
 
-        cities.push(newCity); //lägg till staden 
+        cities.push(newCity);
 
         return new Response(JSON.stringify(newCity), {
           status: 200,
           headers: headerCORS,
-        })
+        });
       } else {
         return new Response(JSON.stringify({ "Message": "Missing parts of request" }), {
           status: 400,
@@ -186,7 +187,7 @@ async function handler(request) {
       return new Response(JSON.stringify("Delete OK"), {
         status: 200,
         headers: headerCORS,
-      })
+      });
     }
 
     //test 14
@@ -194,7 +195,7 @@ async function handler(request) {
       return new Response(JSON.stringify({ error: "This city is not real" }), {
         status: 400,
         headers: headerCORS,
-      })
+      });
     }
   }
 }

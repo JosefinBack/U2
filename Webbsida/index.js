@@ -1,19 +1,25 @@
 const addCityButton = document.querySelector("#addButton");
+addCityButton.classList.add("deleteButton")
 const searchButton = document.querySelector("#searchButton");
+searchButton.classList.add("deleteButton");
 const removeButton = document.querySelector("#remove");
+removeButton.classList.add("deleteButton");
 const foundCities = document.querySelector("#searcedCities");
 
 
 function createDeleteButton(city, div) {
+    const deleteMessage = document.querySelector("#deleteMessage")
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "Delete";
-    deleteButton.style.backgroundColor = "red";
+    deleteButton.classList.add("deleteButton");
 
     deleteButton.addEventListener("click", async function () {
         const options = {
             method: "DELETE",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id: city.id })
+            body: JSON.stringify({
+                id: city.id
+            })
         };
 
         const request = new Request("http://localhost:8000/cities", options);
@@ -21,26 +27,44 @@ function createDeleteButton(city, div) {
 
         if (response.status === 200) {
             div.remove();
+            deleteMessage.textContent = "";
+
+            deleteMessage.textContent = `The city ${city.name} was removed`;
+
+            const okButton = document.createElement("button");
+            okButton.textContent = "OK";
+            okButton.style.marginLeft = "10px";
+            okButton.classList.add("deleteButton");
+            deleteMessage.appendChild(okButton);
+
+            okButton.addEventListener("click", function () {
+                deleteMessage.textContent = "";
+            });
         } else {
             console.log("Something went wrong with delete");
         }
     });
-
     return deleteButton;
 }
 
-// hämta städerna och visa dem på webbsidan
 async function getCities() {
     try {
         const request = new Request("http://localhost:8000/cities");
-        const response = await fetch(request);
-        const cities = await response.json();
+        const responsePromise = await fetch(request);
+        const cities = await responsePromise.json();
 
         const citiesDiv = document.querySelector("#div1");
-
+        citiesDiv.innerHTML += `
+        <ul></ul>
+        `
         for (let city of cities) {
             const div = document.createElement("div");
-            div.textContent = city.name + ", " + city.country;
+            div.classList.add("cityDiv");
+
+            div.innerHTML += `
+            <li>
+            ${city.name}, ${city.country} 
+            </li > `;
 
             const deleteButton = createDeleteButton(city, div);
             div.appendChild(deleteButton);
@@ -75,15 +99,20 @@ addCityButton.addEventListener("click", async function () {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(newCity),
         };
+
         const request = new Request("http://localhost:8000/cities", options);
-        const response = await fetch(request);
+        const responsePromise = await fetch(request);
+        const createdCity = await responsePromise.json();
 
         if (response.status === 200) {
-            const createdCity = await response.json(); // vi får tillbaka nya staden med id
-
             const citiesDiv = document.querySelector("#div1");
             const div = document.createElement("div");
-            div.textContent = createdCity.name + ", " + createdCity.country;
+            div.classList.add("cityDiv");
+
+            div.innerHTML += `
+            <li>
+            ${createdCity.name}, ${createdCity.country} 
+            </li > `;
 
             const deleteButton = createDeleteButton(createdCity, div);
             div.appendChild(deleteButton);
@@ -102,6 +131,8 @@ addCityButton.addEventListener("click", async function () {
 });
 
 searchButton.addEventListener("click", async function () {
+    foundCities.innerHTML = "";
+
     const searchCity = document.querySelector("#searchCity").value;
     const searchCountry = document.querySelector("#searchCountry").value;
     const errorM = document.querySelector("#errorMessage2");
@@ -112,13 +143,12 @@ searchButton.addEventListener("click", async function () {
         return;
     }
 
-    let url = "http://localhost:8000/cities/search?" //url som ska skickas till servern i förfrågan
+    let url = "http://localhost:8000/cities/search?"
 
     if (searchCity) {
         url += "text=" + searchCity;
     }
 
-    //om användaren har skrivit enbart country, så fixas det här. Om det även finns en city, så läggs det till ett & mellan dem. 
     if (searchCountry) {
         if (searchCity) {
             url += "&";
@@ -132,14 +162,21 @@ searchButton.addEventListener("click", async function () {
         if (response.status == 200) {
             const resourse = await response.json();
 
-            foundCities.textContent = "";
+            foundCities.innerHTML += `
+            <ul></ul>
+            `;
 
             for (let city of resourse) {
                 const div = document.createElement("div");
-                div.textContent = city.name + ", " + city.country;
+                div.classList.add("city-div");
+
+                div.innerHTML += `
+                <li>
+                ${city.name}, ${city.country} 
+                </li > `;
+
                 foundCities.appendChild(div);
             }
-
         }
     } catch {
         console.log("Something went wrong with search")
@@ -150,10 +187,6 @@ removeButton.addEventListener("click", function () {
     foundCities.textContent = "";
     searchCity.value = "";
     searchCountry.value = "";
-
 })
-
-
-
 
 getCities();

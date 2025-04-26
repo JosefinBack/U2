@@ -1,20 +1,38 @@
-#addButton {
-    margin-top: 20px;
+@font-face {
+    font-family: "Merienda";
+    src: url(../Font/Merienda-VariableFont_wght.ttf);
 }
 
-#addedCities {
-    border: 1px solid black;
+#addButton {
+    margin-top: 20px;
+    padding: 10px;
+    width: 100%;
 }
 
 body {
     margin: 0px;
+    font-family: "Merienda";
+
+    background-image: url(../Bilder/pinkBG3.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    max-width: 1460px;
 }
 
 .boxes {
     padding: 20px;
-    border: 1px solid black;
+    border: 1px solid white;
     flex-grow: 1;
     flex-basis: 0;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+#buttonsInThrid {
+    display: flex;
+    gap: 10px;
 }
 
 #cityName,
@@ -22,7 +40,11 @@ body {
 #countryName,
 #searchCountry {
     border: none;
+    border-radius: 5px;
     border-bottom: 2px solid black;
+    padding: 5px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 #cities {
@@ -30,31 +52,104 @@ body {
     flex-grow: 1;
 }
 
-container {
+.cityDiv {
     display: flex;
-    max-width: 1400px;
-    margin: 20px 150px;
+    gap: 7px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    list-style-type: none;
+    border-bottom: 1px solid black;
+}
+
+#containerOne {
+    display: flex;
+    margin: 20px 50px;
+    height: 500px;
+    width: 400px;
+}
+
+#containerTwo {
+    display: flex;
+    margin: 20px 50px;
+    height: 500px;
+    width: 600px;
+    gap: 10px;
 }
 
 #div1 {
-    background-color: aliceblue;
-
+    overflow: scroll;
 }
 
 #div2 {
-    background-color: aliceblue;
+    flex-basis: 0;
+    flex-grow: 1;
 }
 
 #div3 {
-    background-color: aliceblue;
+    overflow: scroll;
+    flex-basis: 0;
+    flex-grow: 1;
+}
+
+.deleteButton {
+    background-color: rgb(255, 169, 184);
+    color: white;
+    padding: 2px 5px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+.deleteButton:hover {
+    box-shadow: 3px 3px gray;
+}
+
+.deleteButton:active {
+    color: black;
+}
+
+#deleteMessage {
+    font-style: italic;
+    flex-basis: 0;
+    flex-grow: 1;
 }
 
 #errorMessage,
 #errorMessage2 {
-    color: red;
+    padding: 10px;
+    color: rgb(200, 134, 145);
     font-weight: bold;
+}
+
+#firstH3 {
+    flex-basis: 0;
+    flex-grow: 1;
+}
+
+h2 {
+    text-align: center;
+    font-size: 50px;
+    font-style: italic;
+    margin-bottom: 5px;
 }
 
 .inputDiv {
     padding: 10px 0px;
+}
+
+main {
+    display: flex;
+    justify-content: space-between;
+}
+
+#searchButton,
+#remove {
+    margin-top: 20px;
+    width: 50%;
+}
+
+#topFirst {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }

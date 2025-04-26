@@ -9,44 +9,53 @@
 </head>
 
 <body>
-    <container>
-        <div id="div1" class="boxes">
-            <h3>List of cities</h3>
-        </div>
-        <div id="div2" class="boxes">
-            <h3>Add a city to the list</h3>
-            <p>To add a city, write the name of the city and in what country it's located, then press the button "Add
-                city"</p>
-            <div class="inputDiv">
-                <label for="cityName">Add a city:</label>
-                <input type="text" id="cityName" name="city" autocomplete="off">
+    <h2>Bucketlist for travel</h2>
+    <main>
+        <container id="containerOne">
+            <div id="div1" class="boxes">
+                <div id="topFirst">
+                    <h3 id="firstH3">List of cities</h3>
+                    <div id="deleteMessage"></div>
+                </div>
             </div>
-            <div class="inputDiv">
-                <label for="countryName">Country:</label>
-                <input type="text" id="countryName" name="country" autocomplete="off">
+        </container>
+        <container id="containerTwo">
+            <div id="div2" class="boxes">
+                <h3>Add a city to the list</h3>
+                <p>To add a city, write the name of the city and in what country it's located, then press the button
+                    "Add
+                    city".</p>
+                <div class="inputDiv">
+                    <label for="cityName">Add a city:</label>
+                    <input type="text" id="cityName" name="city" autocomplete="off">
+                </div>
+                <div class="inputDiv">
+                    <label for="countryName">Country:</label>
+                    <input type="text" id="countryName" name="country" autocomplete="off">
+                </div>
+                <button id="addButton">Add city</button>
+                <p id="errorMessage"></p>
             </div>
-            <button id="addButton">Add city</button>
-            <p id="errorMessage"></p>
-        </div>
-
-        <div id="div3" class="boxes">
-            <h3>Search for a city</h3>
-            <p>Search for a city in the list</p>
-            <div class="inputDiv">
-                <label for="cityName">City:</label>
-                <input type="text" id="searchCity" name="city" autocomplete="off">
+            <div id="div3" class="boxes">
+                <h3>Search for a city</h3>
+                <p>Search for a city in the list.</p>
+                <div class="inputDiv">
+                    <label for="cityName">City:</label>
+                    <input type="text" id="searchCity" name="city" autocomplete="off">
+                </div>
+                <div class="inputDiv">
+                    <label for="countryName">Country:</label>
+                    <input type="text" id="searchCountry" name="country" autocomplete="off">
+                </div>
+                <div id="buttonsInThrid">
+                    <button id="searchButton">Search</button>
+                    <button id="remove">Clear the searchlist</button>
+                </div>
+                <div id="errorMessage2"></div>
+                <div id="searcedCities"></div>
             </div>
-            <div class="inputDiv">
-                <label for="countryName">Country:</label>
-                <input type="text" id="searchCountry" name="country" autocomplete="off">
-            </div>
-            <button id="searchButton">Search</button>
-            <button id="remove">Clear the searchlist</button>
-            <div id="errorMessage2"></div>
-
-            <div id="searcedCities"></div>
-        </div>
-    </container>
+        </container>
+    </main>
     <script src="index.js"></script>
 </body>
 
